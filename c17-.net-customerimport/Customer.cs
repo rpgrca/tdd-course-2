@@ -101,19 +101,5 @@ namespace com.tenpines.advancetdd
 
             fileStream.Close();
         }
-
-        public static void Main(string[] args)
-        {
-            try
-            {
-                Customer.ImportCustomers();
-            }
-            catch (Exception e)
-            {
-                Console.Out.Write(e.Message);
-            }
-        }
     }
-
-
 }

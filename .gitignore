@@ -1,0 +1,6 @@
+bin
+obj
+.vs
+_Resharper.Caches
+.gitignore~
+..gitignore.un~
