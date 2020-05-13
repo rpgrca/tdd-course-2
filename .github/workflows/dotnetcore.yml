@@ -14,6 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.0
+
     - name: Setup Nuget.exe
       uses: NuGet/setup-nuget@v1.0.2
 
@@ -22,9 +25,6 @@ jobs:
 
     - name: Install tools
       run: dotnet tool install --global coverlet.console
-
-    - name: Setup MSBuild.exe
-      run: warrenbuckley/Setup-MSBuild@v1
 
     - name: Build Debug with MSBuild
       run: msbuild C17-.Net-CustomerImport.sln -p:Configuration=Debug
