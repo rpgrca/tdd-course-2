@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Setup Nuget.exe
-      uses: warrenbuckley/Setup-Nuget@v1
+      uses: NuGet/setup-nuget@v1.0.2
 
     - name: Restore packages
       run: nuget restore C17-.Net-CustomerImport.sln
