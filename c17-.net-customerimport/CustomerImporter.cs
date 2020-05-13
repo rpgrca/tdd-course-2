@@ -7,6 +7,7 @@ namespace com.tenpines.advancetdd
     {
         private readonly ISession _session;
         private readonly StreamReader _lineReader;
+        private ITransaction _transaction;
 
         public CustomerImporter(ISession session, StreamReader lineReader)
         {
@@ -17,7 +18,7 @@ namespace com.tenpines.advancetdd
         public void Import()
         {
             Customer newCustomer = null;
-            var transaction = _session.BeginTransaction();
+            BeginTransaction(_session, out _transaction);
             var line = _lineReader.ReadLine();
 
             while (line != null)
@@ -52,7 +53,17 @@ namespace com.tenpines.advancetdd
                 line = _lineReader.ReadLine();
             }
 
-            transaction.Commit();
+            EndTransaction();
+        }
+
+        private void EndTransaction()
+        {
+            _transaction.Commit();
+        }
+
+        private void BeginTransaction(ISession session, out ITransaction transaction)
+        {
+            transaction = session.BeginTransaction();
         }
     }
 }

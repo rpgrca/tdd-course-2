@@ -8,7 +8,7 @@ namespace com.tenpines.advancetdd
 {
     public class DataBase
     {
-        public static ISession DataBaseConnection()
+        public static ISession NewConnection()
         {
             var storeConfiguration = new StoreConfiguration();
             var configuration = Fluently.Configure()
@@ -21,6 +21,16 @@ namespace com.tenpines.advancetdd
             new SchemaExport(configuration.BuildConfiguration()).Execute(true, true, false);
 
             return sessionFactory.OpenSession();
+        }
+
+        public static void BeginTransaction(ISession session, out ITransaction transaction)
+        {
+            transaction = session.BeginTransaction();
+        }
+
+        public static void EndTransaction(ITransaction transaction)
+        {
+            transaction.Commit();
         }
     }
 }
