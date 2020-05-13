@@ -47,59 +47,5 @@ namespace com.tenpines.advancetdd
         {
             Addresses.Add(anAddress);
         }
-
-        public static void ImportCustomers()
-        {
-            var fileStream = new System.IO.FileStream("input.txt", FileMode.Open);
-
-            var storeConfiguration = new StoreConfiguration();
-            var configuration = Fluently.Configure()
-                .Database(MsSqlCeConfiguration.Standard.ShowSql().ConnectionString("Data Source=CustomerImport.sdf"))
-                .Mappings(m => m.AutoMappings.Add(AutoMap
-                    .AssemblyOf<Customer>(storeConfiguration)
-                    .Override<Customer>(map => map.HasMany(x => x.Addresses).Cascade.All())));
-
-            var sessionFactory = configuration.BuildSessionFactory();
-            new SchemaExport(configuration.BuildConfiguration()).Execute(true, true, false);
-            var session = sessionFactory.OpenSession();
-
-            var lineReader = new StreamReader(fileStream);
-
-            var transaction = session.BeginTransaction();
-            Customer newCustomer = null;
-            var line = lineReader.ReadLine();
-            while (line != null)
-            {
-                if (line.StartsWith("C"))
-                {
-                    var customerData = line.Split(',');
-                    newCustomer = new Customer();
-                    newCustomer.FirstName = customerData[1];
-                    newCustomer.LastName = customerData[2];
-                    newCustomer.IdentificationType = customerData[3];
-                    newCustomer.IdentificationNumber = customerData[3];
-                    session.Persist(newCustomer);
-                }
-                else if (line.StartsWith("A"))
-                {
-                    var addressData = line.Split(',');
-                    var newAddress = new Address();
-
-                    newCustomer.AddAddress(newAddress);
-                    newAddress.StreetName = addressData[1];
-                    newAddress.StreetNumber = int.Parse(addressData[2]);
-                    newAddress.Town = addressData[3];
-                    newAddress.ZipCode = int.Parse(addressData[4]);
-                    newAddress.Province = addressData[3];
-                }
-
-                line = lineReader.ReadLine();
-            }
-
-            transaction.Commit();
-            session.Close();
-
-            fileStream.Close();
-        }
     }
 }
