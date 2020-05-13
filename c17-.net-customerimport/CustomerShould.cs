@@ -13,13 +13,31 @@ namespace com.tenpines.advancetdd
 {
     public class CustomerShould : IDisposable
     {
-        private ISession _session;
-        private ITransaction _transaction;
+        private readonly ISession _session;
+        private readonly StreamReader _streamReader;
+        private readonly CustomerImporter _customerImporter;
+
+        public CustomerShould()
+        {
+            var storeConfiguration = new StoreConfiguration();
+            var configuration = Fluently.Configure()
+                .Database(MsSqlCeConfiguration.Standard.ShowSql().ConnectionString("Data Source=CustomerImport.sdf"))
+                .Mappings(m => m.AutoMappings.Add(AutoMap
+                    .AssemblyOf<Customer>(storeConfiguration)
+                    .Override<Customer>(map => map.HasMany(x => x.Addresses).Cascade.All())));
+
+            var sessionFactory = configuration.BuildSessionFactory();
+            new SchemaExport(configuration.BuildConfiguration()).Execute(true, true, false);
+
+            _session = sessionFactory.OpenSession();
+            _streamReader = new StreamReader(new FileStream("input.txt", FileMode.Open));
+            _customerImporter = new CustomerImporter(_session, _streamReader);
+        }
 
         [Fact]
         public void GivenAnEmptyDatabase_WhenImportingSampleData_TwoCustomersAreImported()
         {
-            ImportCustomers();
+            _customerImporter.Import();
 
             var customers = _session.CreateCriteria(typeof(Customer)).List<Customer>();
             Assert.Equal(2, customers.Count);
@@ -28,7 +46,7 @@ namespace com.tenpines.advancetdd
         [Fact]
         public void GivenImportedCustomers_WhenQueryingIdNumber22333444_ThenACompleteCustomerWithTwoAddressesIsFound()
         {
-            ImportCustomers();
+            _customerImporter.Import();
 
             var customer = _session
                 .CreateCriteria(typeof(Customer))
@@ -64,7 +82,7 @@ namespace com.tenpines.advancetdd
         [Fact]
         public void GivenImportedCustomers_WhenQueryingIdNumber23256667779_ThenACompleteCustomerWithOneAddressIsFound()
         {
-            ImportCustomers();
+            _customerImporter.Import();
 
             var customer = _session
                 .CreateCriteria(typeof(Customer))
@@ -90,76 +108,11 @@ namespace com.tenpines.advancetdd
                 });
         }
 
-        public CustomerShould()
-        {
-            SetUp();
-        }
-
-        public void ImportCustomers()
-        {
-            var fileStream = new System.IO.FileStream("input.txt", FileMode.Open);
-
-            var lineReader = new StreamReader(fileStream);
-
-            Customer newCustomer = null;
-            var line = lineReader.ReadLine();
-            while (line != null)
-            {
-                if (line.StartsWith("C"))
-                {
-                    var customerData = line.Split(',');
-                    newCustomer = new Customer();
-                    newCustomer.FirstName = customerData[1];
-                    newCustomer.LastName = customerData[2];
-                    newCustomer.IdentificationType = customerData[3];
-                    newCustomer.IdentificationNumber = customerData[4];
-                    _session.Persist(newCustomer);
-                }
-                else if (line.StartsWith("A"))
-                {
-                    var addressData = line.Split(',');
-                    var newAddress = new Address();
-
-                    newCustomer.AddAddress(newAddress);
-                    newAddress.StreetName = addressData[1];
-                    newAddress.StreetNumber = Int32.Parse(addressData[2]);
-                    newAddress.Town = addressData[3];
-                    newAddress.ZipCode = Int32.Parse(addressData[4]);
-                    newAddress.Province = addressData[5];
-                }
-
-                line = lineReader.ReadLine();
-            }
-
-            fileStream.Close();
-        }
-
-        private void CloseSession()
-        {
-            _transaction.Commit();
-            _session.Close();
-        }
-
-        private void SetUp()
-        {
-            var storeConfiguration = new StoreConfiguration();
-            var configuration = Fluently.Configure()
-                .Database(MsSqlCeConfiguration.Standard.ShowSql().ConnectionString("Data Source=CustomerImport.sdf"))
-                .Mappings(m => m.AutoMappings.Add(AutoMap
-                    .AssemblyOf<Customer>(storeConfiguration)
-                    .Override<Customer>(map => map.HasMany(x => x.Addresses).Cascade.All())));
-
-            var sessionFactory = configuration.BuildSessionFactory();
-            new SchemaExport(configuration.BuildConfiguration()).Execute(true, true, false);
-            _session = sessionFactory.OpenSession();
-            _transaction = _session.BeginTransaction();
-        }
-
         public void Dispose()
         {
-            CloseSession();
-            _session?.Dispose();
-            _transaction?.Dispose();
+            _streamReader.Close();
+            _session.Close();
+            _session.Dispose();
         }
     }
 }
