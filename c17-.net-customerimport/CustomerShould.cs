@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using FluentNHibernate.Automapping;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
@@ -16,7 +17,7 @@ namespace com.tenpines.advancetdd
         private ITransaction _transaction;
 
         [Fact]
-        public void Test1()
+        public void GivenAnEmptyDatabase_WhenImportingSampleData_TwoCustomersAreImported()
         {
             ImportCustomers();
 
@@ -25,19 +26,68 @@ namespace com.tenpines.advancetdd
         }
 
         [Fact]
-        public void Test2()
+        public void GivenImportedCustomers_WhenQueryingIdNumber22333444_ThenACompleteCustomerWithTwoAddressesIsFound()
         {
             ImportCustomers();
 
-            var customers = _session
+            var customer = _session
                 .CreateCriteria(typeof(Customer))
                 .Add(Restrictions.Eq("IdentificationType", "D"))
                 .Add(Restrictions.Eq("IdentificationNumber", "22333444"))
-                .List<Customer>();
+                .List<Customer>()
+                .Single();
 
-            Assert.Single(customers);
-            Assert.Equal("Pepe", customers[0].FirstName);
-            Assert.Equal("Sanchez", customers[0].LastName);
+            Assert.NotNull(customer);
+            Assert.Equal("D", customer.IdentificationType);
+            Assert.Equal("22333444", customer.IdentificationNumber);
+            Assert.Equal("Pepe", customer.FirstName);
+            Assert.Equal("Sanchez", customer.LastName);
+
+            Assert.Collection(customer.Addresses,
+                a1 =>
+                {
+                    Assert.Equal("San Martin", a1.StreetName);
+                    Assert.Equal(3322, a1.StreetNumber);
+                    Assert.Equal("Olivos", a1.Town);
+                    Assert.Equal(1636, a1.ZipCode);
+                    Assert.Equal("BsAs", a1.Province); },
+                a2 =>
+                {
+                    Assert.Equal("Maipu", a2.StreetName);
+                    Assert.Equal(888, a2.StreetNumber);
+                    Assert.Equal("Florida", a2.Town);
+                    Assert.Equal(1122, a2.ZipCode);
+                    Assert.Equal("Buenos Aires", a2.Province);
+                });
+        }
+
+        [Fact]
+        public void GivenImportedCustomers_WhenQueryingIdNumber23256667779_ThenACompleteCustomerWithOneAddressIsFound()
+        {
+            ImportCustomers();
+
+            var customer = _session
+                .CreateCriteria(typeof(Customer))
+                .Add(Restrictions.Eq("IdentificationType", "C"))
+                .Add(Restrictions.Eq("IdentificationNumber", "23-25666777-9"))
+                .List<Customer>()
+                .Single();
+
+            Assert.NotNull(customer);
+            Assert.Equal("C", customer.IdentificationType);
+            Assert.Equal("23-25666777-9", customer.IdentificationNumber);
+            Assert.Equal("Juan", customer.FirstName);
+            Assert.Equal("Perez", customer.LastName);
+
+            Assert.Collection(customer.Addresses,
+                a1 =>
+                {
+                    Assert.Equal("Alem", a1.StreetName);
+                    Assert.Equal(1122, a1.StreetNumber);
+                    Assert.Equal("CABA", a1.Town);
+                    Assert.Equal(1001, a1.ZipCode);
+                    Assert.Equal("CABA", a1.Province);
+                });
         }
 
         public CustomerShould()
@@ -75,7 +125,7 @@ namespace com.tenpines.advancetdd
                     newAddress.StreetNumber = Int32.Parse(addressData[2]);
                     newAddress.Town = addressData[3];
                     newAddress.ZipCode = Int32.Parse(addressData[4]);
-                    newAddress.Province = addressData[3];
+                    newAddress.Province = addressData[5];
                 }
 
                 line = lineReader.ReadLine();
