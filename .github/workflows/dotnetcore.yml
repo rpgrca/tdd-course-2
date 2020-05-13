@@ -24,7 +24,7 @@ jobs:
       run: nuget restore C17-.Net-CustomerImport.sln
 
     - name: Install tools
-      run: dotnet tool install --global coverlet.console
+      run: dotnet tool restore
 
     - name: Build Debug with MSBuild
       run: msbuild C17-.Net-CustomerImport.sln -p:Configuration=Debug
@@ -36,4 +36,4 @@ jobs:
 #      run: coverlet c17-.net-customerimport/bin/Debug/net452/CustomerImport.dll --target "dotnet" --targetargs "test c17-.net-customerimport/C17-.Net-CustomerImport.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
 
     - name: Upload
-      run: bash <(curl -s https://codecov.io/bash)
+      run: codecov -f customerimport.coverage.xml
