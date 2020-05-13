@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
-    <OutputType>Library</OutputType>
+    <TargetFramework>net472</TargetFramework>
     <RootNamespace>com.tenpines.advancetdd</RootNamespace>
     <AssemblyName>CustomerImport</AssemblyName>
   </PropertyGroup>
@@ -12,7 +11,11 @@
     <PackageReference Include="Iesi.Collections" Version="3.3.1.4000" />
     <PackageReference Include="NHibernate" Version="3.3.1.4000" />
     <PackageReference Include="System.Data.SqlServerCe_unofficial" Version="4.0.8482.1" />
-    <PackageReference Include="coverlet.collector" Version="1.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="coverlet.collector" Version="1.2.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
@@ -22,7 +25,7 @@
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Coverage' ">
     <Exec Command="dotnet tool restore" />
-    <Exec Command="dotnet coverlet bin/Debug/net452/CustomerImport.dll --target &quot;dotnet&quot; --targetargs &quot;test C17-.Net-CustomerImport.csproj --no-build --verbosity quiet&quot; --format cobertura --output reports/coverage/coverage.cobertura.xml" />
+    <Exec Command="dotnet coverlet bin/Debug/net472/CustomerImport.dll --target &quot;dotnet&quot; --targetargs &quot;test C17-.Net-CustomerImport.csproj --no-build --verbosity quiet&quot; --format cobertura --output reports/coverage/coverage.cobertura.xml" />
     <Exec Command="dotnet reportgenerator &quot;-reports:reports/coverage/coverage.cobertura.xml&quot; &quot;-targetdir:reports/html&quot; &quot;-historydir:reports/coverage/history&quot;" />
   </Target>
 

@@ -32,8 +32,8 @@ jobs:
     - name: Build Release with MSBuild
       run: msbuild C17-.Net-CustomerImport.sln -p:Configuration=Release
 
-    - name: Testing
-      run: coverlet c17-.net-customerimport/bin/Debug/net452/CustomerImport.dll --target "dotnet" --targetargs "test c17-.net-customerimport/C17-.Net-CustomerImport.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
+#    - name: Testing
+#      run: coverlet c17-.net-customerimport/bin/Debug/net452/CustomerImport.dll --target "dotnet" --targetargs "test c17-.net-customerimport/C17-.Net-CustomerImport.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
 
     - name: Upload
       run: bash <(curl -s https://codecov.io/bash)
