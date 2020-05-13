@@ -13,23 +13,29 @@ namespace com.tenpines.advancetdd
 {
     public class CustomerShould : IDisposable
     {
-        private readonly ISession _session;
+        private ISession _session;
         private readonly StreamReader _streamReader;
         private readonly CustomerImporter _customerImporter;
 
         public CustomerShould()
         {
-            var storeConfiguration = new StoreConfiguration();
-            var configuration = Fluently.Configure()
-                .Database(MsSqlCeConfiguration.Standard.ShowSql().ConnectionString("Data Source=CustomerImport.sdf"))
-                .Mappings(m => m.AutoMappings.Add(AutoMap
-                    .AssemblyOf<Customer>(storeConfiguration)
-                    .Override<Customer>(map => map.HasMany(x => x.Addresses).Cascade.All())));
+            _session = DataBase();
 
-            var sessionFactory = configuration.BuildSessionFactory();
-            new SchemaExport(configuration.BuildConfiguration()).Execute(true, true, false);
+            ISession DataBase()
+            {
+                var storeConfiguration = new StoreConfiguration();
+                var configuration = Fluently.Configure()
+                    .Database(MsSqlCeConfiguration.Standard.ShowSql().ConnectionString("Data Source=CustomerImport.sdf"))
+                    .Mappings(m => m.AutoMappings.Add(AutoMap
+                        .AssemblyOf<Customer>(storeConfiguration)
+                        .Override<Customer>(map => map.HasMany(x => x.Addresses).Cascade.All())));
 
-            _session = sessionFactory.OpenSession();
+                var sessionFactory = configuration.BuildSessionFactory();
+                new SchemaExport(configuration.BuildConfiguration()).Execute(true, true, false);
+
+                return sessionFactory.OpenSession();
+            }
+
             _streamReader = new StreamReader(new FileStream("input.txt", FileMode.Open));
             _customerImporter = new CustomerImporter(_session, _streamReader);
         }
