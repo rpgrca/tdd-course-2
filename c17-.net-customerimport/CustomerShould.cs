@@ -1,27 +1,22 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using FluentNHibernate.Automapping;
-using FluentNHibernate.Cfg;
-using FluentNHibernate.Cfg.Db;
-using NHibernate;
 using NHibernate.Criterion;
-using NHibernate.Tool.hbm2ddl;
 using Xunit;
 
 namespace com.tenpines.advancetdd
 {
     public class CustomerShould : IDisposable
     {
-        private ISession _session;
         private readonly StreamReader _streamReader;
         private readonly CustomerImporter _customerImporter;
+        private readonly DataBase _dataBase;
 
         public CustomerShould()
         {
-            _session = DataBase.DataBaseConnection();
             _streamReader = new StreamReader(new FileStream("input.txt", FileMode.Open));
-            _customerImporter = new CustomerImporter(_session, _streamReader);
+            _dataBase = new DataBase();
+            _customerImporter = new CustomerImporter(_dataBase, _streamReader);
         }
 
         [Fact]
@@ -29,7 +24,7 @@ namespace com.tenpines.advancetdd
         {
             _customerImporter.Import();
 
-            var customers = _session.CreateCriteria(typeof(Customer)).List<Customer>();
+            var customers = _dataBase.Session.CreateCriteria(typeof(Customer)).List<Customer>();
             Assert.Equal(2, customers.Count);
         }
 
@@ -38,7 +33,7 @@ namespace com.tenpines.advancetdd
         {
             _customerImporter.Import();
 
-            var customer = _session
+            var customer = _dataBase.Session
                 .CreateCriteria(typeof(Customer))
                 .Add(Restrictions.Eq("IdentificationType", "D"))
                 .Add(Restrictions.Eq("IdentificationNumber", "22333444"))
@@ -74,7 +69,7 @@ namespace com.tenpines.advancetdd
         {
             _customerImporter.Import();
 
-            var customer = _session
+            var customer = _dataBase.Session
                 .CreateCriteria(typeof(Customer))
                 .Add(Restrictions.Eq("IdentificationType", "C"))
                 .Add(Restrictions.Eq("IdentificationNumber", "23-25666777-9"))
@@ -101,8 +96,7 @@ namespace com.tenpines.advancetdd
         public void Dispose()
         {
             _streamReader.Close();
-            _session.Close();
-            _session.Dispose();
+            _dataBase.Close();
         }
     }
 }

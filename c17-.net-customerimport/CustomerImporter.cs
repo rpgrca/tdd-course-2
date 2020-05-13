@@ -1,24 +1,22 @@
 ﻿using System.IO;
-using NHibernate;
 
 namespace com.tenpines.advancetdd
 {
     public class CustomerImporter
     {
-        private readonly ISession _session;
+        private readonly DataBase _dataBase;
         private readonly StreamReader _lineReader;
-        private ITransaction _transaction;
 
-        public CustomerImporter(ISession session, StreamReader lineReader)
+        public CustomerImporter(DataBase dataBase, StreamReader lineReader)
         {
+            _dataBase = dataBase;
             _lineReader = lineReader;
-            _session = session;
         }
 
         public void Import()
         {
             Customer newCustomer = null;
-            BeginTransaction(_session, out _transaction);
+            _dataBase.BeginTransaction();
             var line = _lineReader.ReadLine();
 
             while (line != null)
@@ -33,7 +31,7 @@ namespace com.tenpines.advancetdd
                         IdentificationType = customerData[3],
                         IdentificationNumber = customerData[4]
                     };
-                    _session.Persist(newCustomer);
+                    _dataBase.Session.Persist(newCustomer);
                 }
                 else if (line.StartsWith("A"))
                 {
@@ -53,17 +51,7 @@ namespace com.tenpines.advancetdd
                 line = _lineReader.ReadLine();
             }
 
-            EndTransaction();
-        }
-
-        private void EndTransaction()
-        {
-            _transaction.Commit();
-        }
-
-        private void BeginTransaction(ISession session, out ITransaction transaction)
-        {
-            transaction = session.BeginTransaction();
+            _dataBase.EndTransaction();
         }
     }
 }
