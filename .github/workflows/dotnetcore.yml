@@ -34,6 +34,6 @@ jobs:
 
 #    - name: Testing
 #      run: coverlet c17-.net-customerimport/bin/Debug/net452/CustomerImport.dll --target "dotnet" --targetargs "test c17-.net-customerimport/C17-.Net-CustomerImport.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
-
-    - name: Upload
-      run: codecov -f customerimport.coverage.xml
+#
+#    - name: Upload
+#      run: codecov -f customerimport.coverage.xml
