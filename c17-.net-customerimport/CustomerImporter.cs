@@ -7,7 +7,7 @@ namespace com.tenpines.advancetdd
     public class CustomerImporter
     {
         public const string CUSTOMER_IS_NULL_EXCEPTION = "Customer is null.";
-        public const string RECORD_IS_INCOMPLETE_EXCEPTION = "Record is incomplete.";
+        public const string FIELD_AMOUNT_IS_INVALID_EXCEPTION = "Record has invalid amount of fields.";
         public const string RECORD_IS_UNRECOGNIZED_EXCEPTION = "Record is unrecognized.";
         public const string DATABASE_IS_NULL_EXCEPTION = "Database is null.";
         public const string STREAM_READER_IS_NULL_EXCEPTION = "Stream Reader is null.";
@@ -57,7 +57,7 @@ namespace com.tenpines.advancetdd
             _ = _newCustomer ?? throw new ArgumentException(CUSTOMER_IS_NULL_EXCEPTION);
             if (_currentRecord.Length != 6)
             {
-                throw new ArgumentException(RECORD_IS_INCOMPLETE_EXCEPTION);
+                throw new ArgumentException(FIELD_AMOUNT_IS_INVALID_EXCEPTION);
             }
 
             _newCustomer.AddAddress(new Address
@@ -74,7 +74,7 @@ namespace com.tenpines.advancetdd
         {
             if (_currentRecord.Length != 5)
             {
-                throw new ArgumentException(RECORD_IS_INCOMPLETE_EXCEPTION);
+                throw new ArgumentException(FIELD_AMOUNT_IS_INVALID_EXCEPTION);
             }
 
             _newCustomer = new Customer

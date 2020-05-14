@@ -21,7 +21,7 @@ namespace com.tenpines.advancetdd
         }
 
         public static StreamReader GetStreamReaderWithCorrectData() =>
-            new StreamReader(MemoryStreamBuilder.CreateFrom(new []
+            new StreamReader(MemoryStreamBuilder.CreateFrom(new[]
             {
                 "C,Pepe,Sanchez,D,22333444",
                 "A,San Martin,3322,Olivos,1636,BsAs",
@@ -47,7 +47,7 @@ namespace com.tenpines.advancetdd
             }));
 
         public static StreamReader GetStreamReaderWithCustomerWithFourFields() =>
-            new StreamReader(MemoryStreamBuilder.CreateFrom(new []
+            new StreamReader(MemoryStreamBuilder.CreateFrom(new[]
             {
                 "C,Juan,Perez,C"
             }));
@@ -57,6 +57,19 @@ namespace com.tenpines.advancetdd
             {
                 "C,Juan,Perez,C,23-25666777-9",
                 "A,Alem,1122,CABA,1001"
+            }));
+
+        public static StreamReader GetStreamReaderWithCustomerWithTenFields() =>
+            new StreamReader(MemoryStreamBuilder.CreateFrom(new[]
+            {
+                "C,Pepe,Sanchez,D,22333444,A,B,C,D,E"
+            }));
+
+        public static StreamReader GetStreamReaderWithAddressWithTenFields() =>
+            new StreamReader(MemoryStreamBuilder.CreateFrom(new[]
+            {
+                "C,Juan,Perez,C,23-25666777-9",
+                "A,Alem,1122,CABA,1001,CABA,A,B,C,D"
             }));
     }
 }

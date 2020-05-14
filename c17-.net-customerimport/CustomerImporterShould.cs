@@ -64,7 +64,18 @@ namespace com.tenpines.advancetdd
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 
             var exception = Assert.Throws<ArgumentException>(() => customerImporter.Import());
-            Assert.Equal(CustomerImporter.RECORD_IS_INCOMPLETE_EXCEPTION, exception.Message);
+            Assert.Equal(CustomerImporter.FIELD_AMOUNT_IS_INVALID_EXCEPTION, exception.Message);
+        }
+
+        [Fact]
+        public void GivenAnImporter_WhenImportingStreamWithCustomerWithMoreFields_ThenAnExceptionIsThrown()
+        {
+            var streamReader = StreamStubBuilder.GetStreamReaderWithCustomerWithTenFields();
+            var dataBase = new DataBase();
+            var customerImporter = new CustomerImporter(dataBase, streamReader);
+
+            var exception = Assert.Throws<ArgumentException>(() => customerImporter.Import());
+            Assert.Equal(CustomerImporter.FIELD_AMOUNT_IS_INVALID_EXCEPTION, exception.Message);
         }
 
         [Fact]
@@ -75,7 +86,18 @@ namespace com.tenpines.advancetdd
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 
             var exception = Assert.Throws<ArgumentException>(() => customerImporter.Import());
-            Assert.Equal(CustomerImporter.RECORD_IS_INCOMPLETE_EXCEPTION, exception.Message);
+            Assert.Equal(CustomerImporter.FIELD_AMOUNT_IS_INVALID_EXCEPTION, exception.Message);
+        }
+
+        [Fact]
+        public void GivenAnImporter_WhenImportingStreamWithAddressWithMoreFields_ThenAnExceptionIsThrown()
+        {
+            var streamReader = StreamStubBuilder.GetStreamReaderWithAddressWithTenFields();
+            var dataBase = new DataBase();
+            var customerImporter = new CustomerImporter(dataBase, streamReader);
+
+            var exception = Assert.Throws<ArgumentException>(() => customerImporter.Import());
+            Assert.Equal(CustomerImporter.FIELD_AMOUNT_IS_INVALID_EXCEPTION, exception.Message);
         }
     }
 }
