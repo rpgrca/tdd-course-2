@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace com.tenpines.advancetdd
@@ -8,6 +9,8 @@ namespace com.tenpines.advancetdd
         public const string CUSTOMER_IS_NULL_EXCEPTION = "Customer is null.";
         public const string RECORD_IS_INCOMPLETE_EXCEPTION = "Record is incomplete.";
         public const string RECORD_IS_UNRECOGNIZED_EXCEPTION = "Record is unrecognized.";
+        public const string DATABASE_IS_NULL_EXCEPTION = "Database is null.";
+        public const string STREAM_READER_IS_NULL_EXCEPTION = "Stream Reader is null.";
 
         private readonly DataBase _dataBase;
         private readonly StreamReader _lineReader;
@@ -17,8 +20,8 @@ namespace com.tenpines.advancetdd
 
         public CustomerImporter(DataBase dataBase, StreamReader lineReader)
         {
-            _dataBase = dataBase;
-            _lineReader = lineReader;
+            _dataBase = dataBase ?? throw new ArgumentException(DATABASE_IS_NULL_EXCEPTION);
+            _lineReader = lineReader ?? throw new ArgumentException(STREAM_READER_IS_NULL_EXCEPTION);
         }
 
         public void Import()
@@ -45,10 +48,8 @@ namespace com.tenpines.advancetdd
             {
                 ImportAddress();
             }
-            else
-            {
-                throw new ArgumentException(RECORD_IS_UNRECOGNIZED_EXCEPTION);
-            }
+
+            throw new ArgumentException(RECORD_IS_UNRECOGNIZED_EXCEPTION);
         }
 
         private void ImportAddress()

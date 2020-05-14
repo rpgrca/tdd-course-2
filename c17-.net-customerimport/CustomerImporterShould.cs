@@ -6,7 +6,23 @@ namespace com.tenpines.advancetdd
     public class CustomerImporterShould
     {
         [Fact]
-        public void GivenAnImport_WhenImportingFromEmptyStream_ThenNoCustomerIsImported()
+        public void GivenAnImporter_WhenInitializingWithNullDatabase_ThenAnExceptionIsThrown()
+        {
+            var streamReader = StreamStubBuilder.GetStreamReaderWithNoData();
+            var exception = Assert.Throws<ArgumentException>(() => new CustomerImporter(null, streamReader));
+            Assert.Equal(CustomerImporter.DATABASE_IS_NULL_EXCEPTION, exception.Message);
+        }
+
+        [Fact]
+        public void GivenAnImporter_WhenInitializingWithNullStreamReader_ThenAnExceptionIsThrown()
+        {
+            var dataBase = new DataBase();
+            var exception = Assert.Throws<ArgumentException>(() => new CustomerImporter(dataBase, null));
+            Assert.Equal(CustomerImporter.STREAM_READER_IS_NULL_EXCEPTION, exception.Message);
+        }
+
+        [Fact]
+        public void GivenAnImporter_WhenImportingFromEmptyStream_ThenNoCustomerIsImported()
         {
             var streamReader = StreamStubBuilder.GetStreamReaderWithNoData();
             var dataBase = new DataBase();
@@ -30,7 +46,7 @@ namespace com.tenpines.advancetdd
         }
 
         [Fact]
-        public void GivenAnImport_WhenImportingUnrecognizedRecord_ThenAnExceptionIsThrown()
+        public void GivenAnImporter_WhenImportingUnrecognizedRecord_ThenAnExceptionIsThrown()
         {
             var streamReader = StreamStubBuilder.GetStreamReaderWithCustomerWithEmptyFields();
             var dataBase = new DataBase();
