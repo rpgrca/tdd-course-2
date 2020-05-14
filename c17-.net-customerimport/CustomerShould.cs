@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using NHibernate.Criterion;
 using Xunit;
@@ -9,30 +8,25 @@ namespace com.tenpines.advancetdd
     [Trait("Category", "SkipWhenLiveUnitTesting")]
     public class CustomerShould : IDisposable
     {
-        private readonly StreamReader _streamReader;
         private readonly CustomerImporter _customerImporter;
-        private readonly DataBase _dataBase;
 
-        public CustomerShould()
-        {
-            _streamReader = new StreamStubBuilder()
-                .AddLine("C,Pepe,Sanchez,D,22333444")
-                .AddLine("A,San Martin,3322,Olivos,1636,BsAs")
-                .AddLine("A,Maipu,888,Florida,1122,Buenos Aires")
-                .AddLine("C,Juan,Perez,C,23-25666777-9")
-                .AddLine("A,Alem,1122,CABA,1001,CABA")
-                .Build(); //new StreamReader(new FileStream("input.txt", FileMode.Open));
-
-            _dataBase = new DataBase();
-            _customerImporter = new CustomerImporter(_dataBase, _streamReader);
-        }
+        public CustomerShould() =>
+            _customerImporter = new CustomerImporter(
+                new DataBase(),
+                new StreamStubBuilder()
+                    .AddLine("C,Pepe,Sanchez,D,22333444")
+                    .AddLine("A,San Martin,3322,Olivos,1636,BsAs")
+                    .AddLine("A,Maipu,888,Florida,1122,Buenos Aires")
+                    .AddLine("C,Juan,Perez,C,23-25666777-9")
+                    .AddLine("A,Alem,1122,CABA,1001,CABA")
+                    .Build());
 
         [Fact]
         public void GivenAnEmptyDatabase_WhenImportingSampleData_TwoCustomersAreImported()
         {
             _customerImporter.Import();
 
-            var customers = _dataBase.Session.CreateCriteria(typeof(Customer)).List<Customer>();
+            var customers = new DataBase().Session.CreateCriteria(typeof(Customer)).List<Customer>();
             Assert.Equal(2, customers.Count);
         }
 
@@ -41,7 +35,7 @@ namespace com.tenpines.advancetdd
         {
             _customerImporter.Import();
 
-            var customer = _dataBase.Session
+            var customer = new DataBase().Session
                 .CreateCriteria(typeof(Customer))
                 .Add(Restrictions.Eq("IdentificationType", "D"))
                 .Add(Restrictions.Eq("IdentificationNumber", "22333444"))
@@ -77,7 +71,7 @@ namespace com.tenpines.advancetdd
         {
             _customerImporter.Import();
 
-            var customer = _dataBase.Session
+            var customer = new DataBase().Session
                 .CreateCriteria(typeof(Customer))
                 .Add(Restrictions.Eq("IdentificationType", "C"))
                 .Add(Restrictions.Eq("IdentificationNumber", "23-25666777-9"))
@@ -103,8 +97,14 @@ namespace com.tenpines.advancetdd
 
         public void Dispose()
         {
-            _streamReader.Close();
-            _dataBase.Close();
+            new StreamStubBuilder()
+                .AddLine("C,Pepe,Sanchez,D,22333444")
+                .AddLine("A,San Martin,3322,Olivos,1636,BsAs")
+                .AddLine("A,Maipu,888,Florida,1122,Buenos Aires")
+                .AddLine("C,Juan,Perez,C,23-25666777-9")
+                .AddLine("A,Alem,1122,CABA,1001,CABA")
+                .Build().Close();
+            new DataBase().Close();
         }
     }
 }
