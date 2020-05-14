@@ -1,9 +1,14 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace com.tenpines.advancetdd
 {
     public class CustomerImporter
     {
+        public const string CUSTOMER_IS_NULL_EXCEPTION = "Customer is null.";
+        public const string RECORD_IS_INCOMPLETE_EXCEPTION = "Record is incomplete.";
+        public const string RECORD_IS_UNRECOGNIZED_EXCEPTION = "Record is unrecognized.";
+
         private readonly DataBase _dataBase;
         private readonly StreamReader _lineReader;
         private string _currentLine;
@@ -30,11 +35,6 @@ namespace com.tenpines.advancetdd
             _dataBase.EndTransaction();
         }
 
-        private void InitializeImport()
-        {
-            _newCustomer = null;
-        }
-
         private void ImportRecord()
         {
             if (IsCustomerRecord())
@@ -45,24 +45,37 @@ namespace com.tenpines.advancetdd
             {
                 ImportAddress();
             }
+            else
+            {
+                throw new ArgumentException(RECORD_IS_UNRECOGNIZED_EXCEPTION);
+            }
         }
 
         private void ImportAddress()
         {
-            var newAddress = new Address
+            _ = _newCustomer ?? throw new ArgumentException(CUSTOMER_IS_NULL_EXCEPTION);
+            if (_currentRecord.Length != 6)
+            {
+                throw new ArgumentException(RECORD_IS_INCOMPLETE_EXCEPTION);
+            }
+
+            _newCustomer.AddAddress(new Address
             {
                 StreetName = _currentRecord[1],
                 StreetNumber = int.Parse(_currentRecord[2]),
                 Town = _currentRecord[3],
                 ZipCode = int.Parse(_currentRecord[4]),
                 Province = _currentRecord[5]
-            };
-
-            _newCustomer.AddAddress(newAddress);
+            });
         }
 
         private void ImportCustomer()
         {
+            if (_currentRecord.Length != 5)
+            {
+                throw new ArgumentException(RECORD_IS_INCOMPLETE_EXCEPTION);
+            }
+
             _newCustomer = new Customer
             {
                 FirstName = _currentRecord[1],
@@ -74,25 +87,19 @@ namespace com.tenpines.advancetdd
             _dataBase.Session.Persist(_newCustomer);
         }
 
-        private bool ReadNextLine()
-        {
-            _currentLine = _lineReader.ReadLine();
-            return _currentLine != null;
-        }
+        private void InitializeImport() =>
+            _newCustomer = null;
 
-        private bool IsAddressRecord()
-        {
-            return _currentLine.StartsWith("A");
-        }
+        private bool ReadNextLine() =>
+            (_currentLine = _lineReader.ReadLine()) != null;
 
-        private bool IsCustomerRecord()
-        {
-            return _currentLine.StartsWith("C");
-        }
+        private bool IsAddressRecord() =>
+            _currentLine.StartsWith("A");
 
-        private void CreateRecord()
-        {
+        private bool IsCustomerRecord() =>
+            _currentLine.StartsWith("C");
+
+        private void CreateRecord() =>
             _currentRecord = _currentLine.Split(',');
-        }
     }
 }

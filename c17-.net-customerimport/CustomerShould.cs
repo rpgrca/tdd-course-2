@@ -6,30 +6,16 @@ using Xunit;
 
 namespace com.tenpines.advancetdd
 {
+    [Trait("Category", "SkipWhenLiveUnitTesting")]
     public class CustomerShould : IDisposable
     {
         private readonly StreamReader _streamReader;
         private readonly CustomerImporter _customerImporter;
         private readonly DataBase _dataBase;
 
-        private StreamReader GetStreamReaderWithCorrectData()
-        {
-            var memoryStream = new MemoryStream();
-            var streamWriter = new StreamWriter(memoryStream);
-            streamWriter.WriteLine("C,Pepe,Sanchez,D,22333444");
-            streamWriter.WriteLine("A,San Martin,3322,Olivos,1636,BsAs");
-            streamWriter.WriteLine("A,Maipu,888,Florida,1122,Buenos Aires");
-            streamWriter.WriteLine("C,Juan,Perez,C,23-25666777-9");
-            streamWriter.WriteLine("A,Alem,1122,CABA,1001,CABA");
-            streamWriter.Flush();
-
-            memoryStream.Position = 0;
-            return new StreamReader(memoryStream);
-        }
-
         public CustomerShould()
         {
-            _streamReader = GetStreamReaderWithCorrectData(); //new StreamReader(new FileStream("input.txt", FileMode.Open));
+            _streamReader = StreamStubBuilder.GetStreamReaderWithCorrectData(); //new StreamReader(new FileStream("input.txt", FileMode.Open));
             _dataBase = new DataBase();
             _customerImporter = new CustomerImporter(_dataBase, _streamReader);
         }
