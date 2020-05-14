@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using NHibernate.Criterion;
 using Xunit;
 
 namespace com.tenpines.advancetdd
