@@ -7,20 +7,19 @@ namespace com.tenpines.advancetdd
     [ExcludeFromCodeCoverage]
     public class TranscientCustomerService : ICustomerService
     {
-        private readonly List<Customer> _customers = new List<Customer>();
-        private int _transactionCounter = 0;
+        private readonly List<Customer> _customers;
 
-        public void BeginTransaction() =>
-            _transactionCounter++;
+        public TranscientCustomerService() => _customers = new List<Customer>();
 
-        public void EndTransaction() =>
-            _transactionCounter--;
-
-        public void Close()
+        public void BeginTransaction()
         {
-            _customers.Clear();
-            _transactionCounter = 0;
         }
+
+        public void EndTransaction()
+        {
+        }
+
+        public void Close() => _customers.Clear();
 
         public IList<Customer> GetCustomers() => _customers;
 
