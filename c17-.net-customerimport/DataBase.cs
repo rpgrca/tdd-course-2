@@ -1,23 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FluentNHibernate.Automapping;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
+using NHibernate.Criterion;
 using NHibernate.Tool.hbm2ddl;
 
 namespace com.tenpines.advancetdd
 {
     public class DataBase
     {
-        public ISession Session { get; }
+        // TODO: Transactions should be a pile
         private ITransaction _transaction;
+        private readonly ISession _session;
 
-        public DataBase()
-        {
-            Session = NewConnection();
-        }
+        public DataBase() => _session = NewConnection();
 
-        private ISession NewConnection()
+        private static ISession NewConnection()
         {
             var storeConfiguration = new StoreConfiguration();
             var configuration = Fluently.Configure()
@@ -32,20 +32,26 @@ namespace com.tenpines.advancetdd
             return sessionFactory.OpenSession();
         }
 
-        public void BeginTransaction()
-        {
-            _transaction = Session.BeginTransaction();
-        }
+        public void BeginTransaction() => _transaction = _session.BeginTransaction();
 
-        public void EndTransaction()
-        {
-            _transaction.Commit();
-        }
+        public void EndTransaction() => _transaction.Commit();
 
         public void Close()
         {
-            Session.Close();
-            Session.Dispose();
+            _session.Close();
+            _session.Dispose();
         }
+
+        public IList<Customer> GetCustomers() => _session.CreateCriteria<Customer>().List<Customer>();
+
+        public Customer GetCustomerWithIdentification(string identificationType, string identificationNumber) =>
+            _session
+                .CreateCriteria<Customer>()
+                .Add(Restrictions.Eq("IdentificationType", identificationType))
+                .Add(Restrictions.Eq("IdentificationNumber", identificationNumber))
+                .List<Customer>()
+                .Single();
+
+        public void SaveCustomer(Customer newCustomer) => _session.Persist(newCustomer);
     }
 }

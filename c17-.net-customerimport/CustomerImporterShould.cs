@@ -30,7 +30,7 @@ namespace com.tenpines.advancetdd
 
             customerImporter.Import();
 
-            var customers = dataBase.Session.CreateCriteria(typeof(Customer)).List<Customer>();
+            var customers = dataBase.GetCustomers();
             Assert.Empty(customers);
         }
 

@@ -87,7 +87,7 @@ namespace com.tenpines.advancetdd
                 IdentificationNumber = _currentRecord[4]
             };
 
-            _dataBase.Session.Persist(_newCustomer);
+            _dataBase.SaveCustomer(_newCustomer);
         }
 
         private void InitializeImport() =>
