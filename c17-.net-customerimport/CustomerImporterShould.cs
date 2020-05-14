@@ -53,6 +53,8 @@ namespace com.tenpines.advancetdd
         [InlineData("Z,,,,,")]
         [InlineData(null)]
         [InlineData("")]
+        [InlineData("Carlos,Juan,Perez,C,23-25666777-9")]
+        [InlineData("Alberto,Alem,1122,CABA,1001,CABA")]
         public void GivenAnImporter_WhenImportingUnrecognizedRecord_ThenAnExceptionIsThrown(string unrecognizedRecord)
         {
             var streamReader = new StreamStubBuilder()

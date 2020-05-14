@@ -96,10 +96,10 @@ namespace com.tenpines.advancetdd
             (_currentLine = _lineReader.ReadLine()) != null;
 
         private bool IsAddressRecord() =>
-            _currentLine.StartsWith("A");
+            _currentLine.StartsWith("A,");
 
         private bool IsCustomerRecord() =>
-            _currentLine.StartsWith("C");
+            _currentLine.StartsWith("C,");
 
         private void CreateRecord() =>
             _currentRecord = _currentLine.Split(',');
