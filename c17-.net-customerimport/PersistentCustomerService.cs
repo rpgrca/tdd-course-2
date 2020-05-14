@@ -9,13 +9,13 @@ using NHibernate.Tool.hbm2ddl;
 
 namespace com.tenpines.advancetdd
 {
-    public class DataBase : IDataBase
+    public class PersistentCustomerService : ICustomerService
     {
         // TODO: Transactions should be a pile
         private ITransaction _transaction;
         private readonly ISession _session;
 
-        public DataBase() => _session = NewConnection();
+        public PersistentCustomerService() => _session = NewConnection();
 
         private static ISession NewConnection()
         {

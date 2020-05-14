@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace com.tenpines.advancetdd
 {
-    public class MemoryDataBase : IDataBase
+    [ExcludeFromCodeCoverage]
+    public class TranscientCustomerService : ICustomerService
     {
         private readonly List<Customer> _customers = new List<Customer>();
         private int _transactionCounter = 0;

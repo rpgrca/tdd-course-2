@@ -8,24 +8,24 @@ namespace com.tenpines.advancetdd
         public const string CUSTOMER_IS_NULL_EXCEPTION = "Customer is null.";
         public const string FIELD_AMOUNT_IS_INVALID_EXCEPTION = "Record has invalid amount of fields.";
         public const string RECORD_IS_UNRECOGNIZED_EXCEPTION = "Record is unrecognized.";
-        public const string DATABASE_IS_NULL_EXCEPTION = "Database is null.";
+        public const string CUSTOMER_SERVICE_IS_NULL_EXCEPTION = "Customer service is null.";
         public const string STREAM_READER_IS_NULL_EXCEPTION = "Stream Reader is null.";
 
-        private readonly IDataBase _dataBase;
+        private readonly ICustomerService _customerService;
         private readonly StreamReader _lineReader;
         private string _currentLine;
         private string[] _currentRecord;
         private Customer _newCustomer;
 
-        public CustomerImporter(IDataBase dataBase, StreamReader lineReader)
+        public CustomerImporter(ICustomerService customerService, StreamReader lineReader)
         {
-            _dataBase = dataBase ?? throw new ArgumentException(DATABASE_IS_NULL_EXCEPTION);
+            _customerService = customerService ?? throw new ArgumentException(CUSTOMER_SERVICE_IS_NULL_EXCEPTION);
             _lineReader = lineReader ?? throw new ArgumentException(STREAM_READER_IS_NULL_EXCEPTION);
         }
 
         public void Import()
         {
-            _dataBase.BeginTransaction();
+            _customerService.BeginTransaction();
 
             InitializeImport();
             while (ReadNextLine())
@@ -34,7 +34,7 @@ namespace com.tenpines.advancetdd
                 ImportRecord();
             }
 
-            _dataBase.EndTransaction();
+            _customerService.EndTransaction();
         }
 
         private void ImportRecord()
@@ -86,7 +86,7 @@ namespace com.tenpines.advancetdd
                 IdentificationNumber = _currentRecord[4]
             };
 
-            _dataBase.SaveCustomer(_newCustomer);
+            _customerService.SaveCustomer(_newCustomer);
         }
 
         private void InitializeImport() =>

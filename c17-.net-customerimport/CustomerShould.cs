@@ -8,7 +8,7 @@ namespace com.tenpines.advancetdd
     public class CustomerShould : IDisposable
     {
         private readonly CustomerImporter _customerImporter;
-        private readonly IDataBase _dataBase;
+        private readonly ICustomerService _customerService;
         private readonly StreamReader _streamReader;
 
         public CustomerShould()
@@ -20,8 +20,8 @@ namespace com.tenpines.advancetdd
                 .AddLine("C,Juan,Perez,C,23-25666777-9")
                 .AddLine("A,Alem,1122,CABA,1001,CABA")
                 .Build();
-            _dataBase = new DataBase();
-            _customerImporter = new CustomerImporter(_dataBase, _streamReader);
+            _customerService = new PersistentCustomerService();
+            _customerImporter = new CustomerImporter(_customerService, _streamReader);
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace com.tenpines.advancetdd
         {
             _customerImporter.Import();
 
-            var customers = _dataBase.GetCustomers();
+            var customers = _customerService.GetCustomers();
             Assert.Equal(2, customers.Count);
         }
 
@@ -38,7 +38,7 @@ namespace com.tenpines.advancetdd
         {
             _customerImporter.Import();
 
-            var customer = _dataBase.GetCustomerWithIdentification("D", "22333444");
+            var customer = _customerService.GetCustomerWithIdentification("D", "22333444");
 
             Assert.NotNull(customer);
             Assert.Equal("D", customer.IdentificationType);
@@ -69,7 +69,7 @@ namespace com.tenpines.advancetdd
         {
             _customerImporter.Import();
 
-            var customer = _dataBase.GetCustomerWithIdentification("C", "23-25666777-9");
+            var customer = _customerService.GetCustomerWithIdentification("C", "23-25666777-9");
 
             Assert.NotNull(customer);
             Assert.Equal("C", customer.IdentificationType);
@@ -91,7 +91,7 @@ namespace com.tenpines.advancetdd
         public void Dispose()
         {
             _streamReader.Close();
-            _dataBase.Close();
+            _customerService.Close();
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace com.tenpines.advancetdd
 {
-    public interface IDataBase
+    public interface ICustomerService
     {
         void BeginTransaction();
         void EndTransaction();
