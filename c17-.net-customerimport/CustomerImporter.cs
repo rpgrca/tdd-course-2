@@ -48,8 +48,10 @@ namespace com.tenpines.advancetdd
             {
                 ImportAddress();
             }
-
-            throw new ArgumentException(RECORD_IS_UNRECOGNIZED_EXCEPTION);
+            else
+            {
+                throw new ArgumentException(RECORD_IS_UNRECOGNIZED_EXCEPTION);
+            }
         }
 
         private void ImportAddress()
