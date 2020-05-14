@@ -8,7 +8,7 @@ namespace com.tenpines.advancetdd
         [Fact]
         public void GivenAnImporter_WhenInitializingWithNullDatabase_ThenAnExceptionIsThrown()
         {
-            var streamReader = StreamStubBuilder.GetStreamReaderWithNoData();
+            var streamReader = new StreamStubBuilder().Build();
             var exception = Assert.Throws<ArgumentException>(() => new CustomerImporter(null, streamReader));
             Assert.Equal(CustomerImporter.DATABASE_IS_NULL_EXCEPTION, exception.Message);
         }
@@ -24,7 +24,7 @@ namespace com.tenpines.advancetdd
         [Fact]
         public void GivenAnImporter_WhenImportingFromEmptyStream_ThenNoCustomerIsImported()
         {
-            var streamReader = StreamStubBuilder.GetStreamReaderWithNoData();
+            var streamReader = new StreamStubBuilder().Build();
             var dataBase = new DataBase();
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 
@@ -37,7 +37,11 @@ namespace com.tenpines.advancetdd
         [Fact]
         public void GivenAnImporter_WhenImportingStreamWithAddressBeforeCustomer_ThenAnExceptionIsThrown()
         {
-            var streamReader = StreamStubBuilder.GetStreamReaderWithAddressBeforeCustomer();
+            var streamReader = new StreamStubBuilder()
+                .AddLine("A,Alem,1122,CABA,1001,CABA")
+                .AddLine("C,Juan,Perez,C,23-25666777-9")
+                .Build();
+
             var dataBase = new DataBase();
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 
@@ -45,10 +49,16 @@ namespace com.tenpines.advancetdd
             Assert.Equal(CustomerImporter.CUSTOMER_IS_NULL_EXCEPTION, exception.Message);
         }
 
-        [Fact]
-        public void GivenAnImporter_WhenImportingUnrecognizedRecord_ThenAnExceptionIsThrown()
+        [Theory]
+        [InlineData("Z,,,,,")]
+        [InlineData(null)]
+        [InlineData("")]
+        public void GivenAnImporter_WhenImportingUnrecognizedRecord_ThenAnExceptionIsThrown(string unrecognizedRecord)
         {
-            var streamReader = StreamStubBuilder.GetStreamReaderWithCustomerWithEmptyFields();
+            var streamReader = new StreamStubBuilder()
+                .AddLine(unrecognizedRecord)
+                .Build();
+
             var dataBase = new DataBase();
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 
@@ -56,21 +66,15 @@ namespace com.tenpines.advancetdd
             Assert.Equal(CustomerImporter.RECORD_IS_UNRECOGNIZED_EXCEPTION, exception.Message);
         }
 
-        [Fact]
-        public void GivenAnImporter_WhenImportingStreamWithIncompleteCustomer_ThenAnExceptionIsThrown()
+        [Theory]
+        [InlineData("C,Pepe,Sanchez,D,22333444,A,B,C,D,E")]
+        [InlineData("C,Juan,Perez,C")]
+        public void GivenAnImporter_WhenImportingStreamWithCustomerWithInvalidAmountOfFields_ThenAnExceptionIsThrown(string invalidRecord)
         {
-            var streamReader = StreamStubBuilder.GetStreamReaderWithCustomerWithFourFields();
-            var dataBase = new DataBase();
-            var customerImporter = new CustomerImporter(dataBase, streamReader);
+            var streamReader = new StreamStubBuilder()
+                .AddLine(invalidRecord)
+                .Build();
 
-            var exception = Assert.Throws<ArgumentException>(() => customerImporter.Import());
-            Assert.Equal(CustomerImporter.FIELD_AMOUNT_IS_INVALID_EXCEPTION, exception.Message);
-        }
-
-        [Fact]
-        public void GivenAnImporter_WhenImportingStreamWithCustomerWithMoreFields_ThenAnExceptionIsThrown()
-        {
-            var streamReader = StreamStubBuilder.GetStreamReaderWithCustomerWithTenFields();
             var dataBase = new DataBase();
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 
@@ -81,7 +85,11 @@ namespace com.tenpines.advancetdd
         [Fact]
         public void GivenAnImporter_WhenImportingStreamWithIncompleteAddress_ThenAnExceptionIsThrown()
         {
-            var streamReader = StreamStubBuilder.GetStreamReaderWithAddressWithFourFields();
+            var streamReader = new StreamStubBuilder()
+                .AddLine("C,Juan,Perez,C,23-25666777-9")
+                .AddLine("A,Alem,1122,CABA,1001")
+                .Build();
+
             var dataBase = new DataBase();
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 
@@ -92,7 +100,11 @@ namespace com.tenpines.advancetdd
         [Fact]
         public void GivenAnImporter_WhenImportingStreamWithAddressWithMoreFields_ThenAnExceptionIsThrown()
         {
-            var streamReader = StreamStubBuilder.GetStreamReaderWithAddressWithTenFields();
+            var streamReader = new StreamStubBuilder()
+                .AddLine("C,Juan,Perez,C,23-25666777-9")
+                .AddLine("A,Alem,1122,CABA,1001,CABA,A,B,C,D")
+                .Build();
+
             var dataBase = new DataBase();
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 

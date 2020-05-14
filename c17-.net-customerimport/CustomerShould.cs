@@ -15,7 +15,14 @@ namespace com.tenpines.advancetdd
 
         public CustomerShould()
         {
-            _streamReader = StreamStubBuilder.GetStreamReaderWithCorrectData(); //new StreamReader(new FileStream("input.txt", FileMode.Open));
+            _streamReader = new StreamStubBuilder()
+                .AddLine("C,Pepe,Sanchez,D,22333444")
+                .AddLine("A,San Martin,3322,Olivos,1636,BsAs")
+                .AddLine("A,Maipu,888,Florida,1122,Buenos Aires")
+                .AddLine("C,Juan,Perez,C,23-25666777-9")
+                .AddLine("A,Alem,1122,CABA,1001,CABA")
+                .Build(); //new StreamReader(new FileStream("input.txt", FileMode.Open));
+
             _dataBase = new DataBase();
             _customerImporter = new CustomerImporter(_dataBase, _streamReader);
         }
