@@ -9,7 +9,7 @@ using NHibernate.Tool.hbm2ddl;
 
 namespace com.tenpines.advancetdd
 {
-    public class DataBase
+    public class DataBase : IDataBase
     {
         // TODO: Transactions should be a pile
         private ITransaction _transaction;

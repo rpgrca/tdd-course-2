@@ -10,7 +10,7 @@ namespace com.tenpines.advancetdd
     public class CustomerShould : IDisposable
     {
         private readonly CustomerImporter _customerImporter;
-        private readonly DataBase _dataBase;
+        private readonly IDataBase _dataBase;
         private readonly StreamReader _streamReader;
 
         public CustomerShould()

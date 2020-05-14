@@ -25,7 +25,7 @@ namespace com.tenpines.advancetdd
         public void GivenAnImporter_WhenImportingFromEmptyStream_ThenNoCustomerIsImported()
         {
             var streamReader = new StreamStubBuilder().Build();
-            var dataBase = new DataBase();
+            var dataBase = new MemoryDataBase();
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 
             customerImporter.Import();
@@ -42,7 +42,7 @@ namespace com.tenpines.advancetdd
                 .AddLine("C,Juan,Perez,C,23-25666777-9")
                 .Build();
 
-            var dataBase = new DataBase();
+            var dataBase = new MemoryDataBase();
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 
             var exception = Assert.Throws<ArgumentException>(() => customerImporter.Import());
@@ -59,7 +59,7 @@ namespace com.tenpines.advancetdd
                 .AddLine(unrecognizedRecord)
                 .Build();
 
-            var dataBase = new DataBase();
+            var dataBase = new MemoryDataBase();
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 
             var exception = Assert.Throws<ArgumentException>(() => customerImporter.Import());
@@ -75,7 +75,7 @@ namespace com.tenpines.advancetdd
                 .AddLine(invalidRecord)
                 .Build();
 
-            var dataBase = new DataBase();
+            var dataBase = new MemoryDataBase();
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 
             var exception = Assert.Throws<ArgumentException>(() => customerImporter.Import());
@@ -90,7 +90,7 @@ namespace com.tenpines.advancetdd
                 .AddLine("A,Alem,1122,CABA,1001")
                 .Build();
 
-            var dataBase = new DataBase();
+            var dataBase = new MemoryDataBase();
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 
             var exception = Assert.Throws<ArgumentException>(() => customerImporter.Import());
@@ -105,7 +105,7 @@ namespace com.tenpines.advancetdd
                 .AddLine("A,Alem,1122,CABA,1001,CABA,A,B,C,D")
                 .Build();
 
-            var dataBase = new DataBase();
+            var dataBase = new MemoryDataBase();
             var customerImporter = new CustomerImporter(dataBase, streamReader);
 
             var exception = Assert.Throws<ArgumentException>(() => customerImporter.Import());
