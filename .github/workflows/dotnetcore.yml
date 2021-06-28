@@ -35,7 +35,7 @@ jobs:
     - name: Testing
       working-directory: CustomerImport
       run: |
-           dotnet test c17-.net-customerimport\C17-.Net-CustomerImport.csproj --no-build --verbosity quiet
+           dotnet test --no-build --verbosity quiet
 
     - name: Checking coverage
       working-directory: CustomerImport
