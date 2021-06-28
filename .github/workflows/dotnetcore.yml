@@ -23,9 +23,6 @@ jobs:
       working-directory: CustomerImport
       run: dotnet restore C17-.Net-CustomerImport.sln
 
-    - name: Install tools
-      run: dotnet tool restore
-
     - name: Install coverlet
       run: dotnet tool install --global coverlet.console
 
@@ -36,8 +33,7 @@ jobs:
            dotnet build --configuration Release --no-restore C17-.Net-CustomerImport.sln
 
     - name: Testing
-      working-directory: CustomerImport
-      run: coverlet c17-.net-customerimport/bin/Debug/net5.0/CustomerImport.dll --target "dotnet" --targetargs "test c17-.net-customerimport/C17-.Net-CustomerImport.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
+      run: coverlet CustomerImport/c17-.net-customerimport/bin/Debug/net5.0/CustomerImport.dll --target "dotnet" --targetargs "test CustomerImport/c17-.net-customerimport/C17-.Net-CustomerImport.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
 
     - name: Upload coverage to CodeCov
       run: bash <(curl -s https://codecov.io/bash)
