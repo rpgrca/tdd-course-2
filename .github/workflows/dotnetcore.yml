@@ -28,8 +28,9 @@ jobs:
 
     - name: Build Debug and Release
       working-directory: CustomerImport
-      run: dotnet build --configuration Debug --no-restore C17-.Net-CustomerImport.sln
-      run: dotnet build --configuration Release --no-restore C17-.Net-CustomerImport.sln
+      run: |
+           dotnet build --configuration Debug --no-restore C17-.Net-CustomerImport.sln
+           dotnet build --configuration Release --no-restore C17-.Net-CustomerImport.sln
 
     - name: Testing
       working-directory: CustomerImport
