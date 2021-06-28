@@ -36,7 +36,6 @@ jobs:
       working-directory: CustomerImport
       run: |
            dotnet test c17-.net-customerimport\C17-.Net-CustomerImport.csproj --no-build --verbosity quiet
-           Get-ChildItem -Path .\CustomerImport\c17-.net-customerimport\bin\Debug\net5.0
            coverlet c17-.net-customerimport\bin\Debug\net5.0\CustomerImport.dll --target "dotnet" --targetargs "test c17-.net-customerimport\C17-.Net-CustomerImport.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
 
     - name: Upload coverage to CodeCov
