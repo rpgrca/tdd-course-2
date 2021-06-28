@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NHibernate.Linq;
 
 namespace com.tenpines.advancetdd
@@ -22,7 +23,7 @@ namespace com.tenpines.advancetdd
             var memoryStream = new MemoryStream();
             var streamWriter = new StreamWriter(memoryStream);
 
-            contents.ForEach(line => streamWriter.WriteLine(line));
+            contents.ToList().ForEach(line => streamWriter.WriteLine(line));
             streamWriter.Flush();
 
             memoryStream.Position = 0;
