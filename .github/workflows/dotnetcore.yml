@@ -12,28 +12,34 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
-    - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.0
-
-    - name: Setup Nuget.exe
-      uses: NuGet/setup-nuget@v1.0.2
+    - name: Setup .NET 5
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
 
     - name: Restore packages
-      run: nuget restore C17-.Net-CustomerImport.sln
+      working-directory: CustomerImport
+      run: dotnet restore C17-.Net-CustomerImport.sln
 
     - name: Install tools
       run: dotnet tool restore
 
-    - name: Build Debug with MSBuild
-      run: msbuild C17-.Net-CustomerImport.sln -p:Configuration=Debug
+    - name: Build Debug and Release
+      working-directory: CustomerImport
+      run: dotnet build --configuration Debug --no-restore C17-.Net-CustomerImport.sln
+      run: dotnet build --configuration Release --no-restore C17-.Net-CustomerImport.sln
 
-    - name: Build Release with MSBuild
-      run: msbuild C17-.Net-CustomerImport.sln -p:Configuration=Release
+    - name: Testing
+      working-directory: CustomerImport
+      run: coverlet c17-.net-customerimport/bin/Debug/net50/CustomerImport.dll --target "dotnet" --targetargs "test c17-.net-customerimport/C17-.Net-CustomerImport.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
 
-#    - name: Testing
-#      run: coverlet c17-.net-customerimport/bin/Debug/net452/CustomerImport.dll --target "dotnet" --targetargs "test c17-.net-customerimport/C17-.Net-CustomerImport.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
-#
-#    - name: Upload
-#      run: codecov -f customerimport.coverage.xml
+    - name: Upload coverage to CodeCov
+      run: bash <(curl -s https://codecov.io/bash)
+
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v2
+      with:
+        name: code-coverage-report
+        path: ./*.coverage.xml
