@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>CustomerImport.UnitTests</RootNamespace>
-    <AssemblyName>CustomerImport</AssemblyName>
+    <AssemblyName>CustomerImport.UnitTests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

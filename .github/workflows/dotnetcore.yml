@@ -40,7 +40,7 @@ jobs:
     - name: Checking coverage
       working-directory: CustomerImport
       run: |
-           coverlet c17-.net-customerimport/bin/Debug/net5.0/CustomerImport.dll --target "dotnet" --targetargs "test c17-.net-customerimport/C17-.Net-CustomerImport.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
+           coverlet C17-.Net-CustomerImport.UnitTests/bin/Debug/net5.0/CustomerImport.UnitTests.dll --target "dotnet" --targetargs "test C17-.Net-CustomerImport.UnitTests/C17-.Net-CustomerImport.UnitTests.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
 
     - name: Upload coverage to CodeCov
       run: bash <(curl -s https://codecov.io/bash)
