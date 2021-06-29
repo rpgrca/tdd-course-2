@@ -37,16 +37,16 @@ jobs:
       run: |
            dotnet test --no-build
 
-#    - name: Checking coverage
-#      working-directory: CustomerImport
-#      run: |
-#           coverlet c17-.net-customerimport\bin\Debug\net5.0\CustomerImport.dll --target "dotnet" --targetargs "test c17-.net-customerimport\C17-.Net-CustomerImport.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
-#
-#    - name: Upload coverage to CodeCov
-#      run: bash <(curl -s https://codecov.io/bash)
-#
-#    - name: Archive code coverage results
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: code-coverage-report
-#        path: ./*.coverage.xml
+    - name: Checking coverage
+      working-directory: CustomerImport
+      run: |
+           coverlet c17-.net-customerimport/bin/Debug/net5.0/CustomerImport.dll --target "dotnet" --targetargs "test c17-.net-customerimport/C17-.Net-CustomerImport.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
+
+    - name: Upload coverage to CodeCov
+      run: bash <(curl -s https://codecov.io/bash)
+
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v2
+      with:
+        name: code-coverage-report
+        path: ./*.coverage.xml
