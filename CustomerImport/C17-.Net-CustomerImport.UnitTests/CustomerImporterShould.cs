@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
+using CustomerImport.Logic;
 
-namespace com.tenpines.advancetdd
+namespace CustomerImport.UnitTests
 {
     public class CustomerImporterShould
     {

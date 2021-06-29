@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace com.tenpines.advancetdd
+namespace CustomerImport.Logic
 {
     public class CustomerImporter
     {

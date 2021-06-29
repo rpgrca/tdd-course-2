@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>com.tenpines.advancetdd</RootNamespace>
+    <RootNamespace>CustomerImport.UnitTests</RootNamespace>
     <AssemblyName>CustomerImport</AssemblyName>
   </PropertyGroup>
 
@@ -62,5 +62,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\C17-.Net-CustomerImport.Logic\C17-.Net-CustomerImport.Logic.csproj" />
+    </ItemGroup>
 
 </Project>

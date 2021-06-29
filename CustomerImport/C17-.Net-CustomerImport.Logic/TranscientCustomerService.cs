@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace com.tenpines.advancetdd
+namespace CustomerImport.Logic
 {
     [ExcludeFromCodeCoverage]
     public class TranscientCustomerService : ICustomerService

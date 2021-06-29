@@ -2,8 +2,9 @@
 using System.IO;
 using System.Linq;
 using NHibernate.Linq;
+using CustomerImport.Logic;
 
-namespace com.tenpines.advancetdd
+namespace CustomerImport.UnitTests
 {
     public class StreamStubBuilder
     {

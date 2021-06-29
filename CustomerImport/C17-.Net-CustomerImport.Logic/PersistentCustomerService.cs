@@ -7,7 +7,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Tool.hbm2ddl;
 
-namespace com.tenpines.advancetdd
+namespace CustomerImport.Logic
 {
     public class PersistentCustomerService : ICustomerService
     {

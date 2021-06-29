@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using Xunit;
+using CustomerImport.Logic;
 
-namespace com.tenpines.advancetdd
+namespace CustomerImport.UnitTests
 {
     [Trait("Category", "SkipWhenLiveUnitTesting")]
     public class CustomerShould : IDisposable

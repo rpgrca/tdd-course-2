@@ -1,4 +1,6 @@
-﻿namespace com.tenpines.advancetdd
+﻿using CustomerImport.Logic;
+
+namespace CustomerImport.UnitTests
 {
     public static class Environment
     {

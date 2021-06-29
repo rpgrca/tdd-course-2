@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace com.tenpines.advancetdd
+namespace CustomerImport.Logic
 {
     public interface ICustomerService
     {
