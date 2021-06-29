@@ -15,7 +15,7 @@ namespace com.tenpines.advancetdd
             Assert.Equal(CustomerImporter.CUSTOMER_SERVICE_IS_NULL_EXCEPTION, exception.Message);
         }
 
-        [Fact]
+        [Fact(Skip = "Requires Windows to run")]
         public void GivenAnImporter_WhenInitializingWithNullStreamReader_ThenAnExceptionIsThrown()
         {
             var customerService = new PersistentCustomerService();

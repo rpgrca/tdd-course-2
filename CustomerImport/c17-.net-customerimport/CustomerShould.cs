@@ -24,7 +24,7 @@ namespace com.tenpines.advancetdd
             _customerImporter = new CustomerImporter(_customerService, _streamReader);
         }
 
-        [Fact]
+        [Fact(Skip = "Integration test available only on Windows")]
         public void GivenAnEmptyDatabase_WhenImportingSampleData_TwoCustomersAreImported()
         {
             _customerImporter.Import();
@@ -33,7 +33,7 @@ namespace com.tenpines.advancetdd
             Assert.Equal(2, customers.Count);
         }
 
-        [Fact]
+        [Fact(Skip = "Integration test available only on Windows")]
         public void GivenImportedCustomers_WhenQueryingIdNumber22333444_ThenACompleteCustomerWithTwoAddressesIsFound()
         {
             _customerImporter.Import();
@@ -64,7 +64,7 @@ namespace com.tenpines.advancetdd
                 });
         }
 
-        [Fact]
+        [Fact(Skip = "Integration test available only on Windows")]
         public void GivenImportedCustomers_WhenQueryingIdNumber23256667779_ThenACompleteCustomerWithOneAddressIsFound()
         {
             _customerImporter.Import();
