@@ -7,5 +7,5 @@ Ejercicios del curso [Test Driven Development Avanzado](https://academia.10pines
 
 [buildall-img]: https://github.com/rpgrca/tdd-course-2/actions/workflows/dotnetcore.yml/badge.svg
 [buildall-url]: https://github.com/rpgrca/tdd-course-2/actions/workflows/dotnetcore.yml
-[codecov-img]: https://codecov.io/gh/rpgrca/tdd-course-2/branch/master/graph/badge.svg?token=y7P8L0Hoas
+[codecov-img]: https://codecov.io/gh/rpgrca/tdd-course-2/branch/main/graph/badge.svg?token=y7P8L0Hoas
 [codecov-url]: https://codecov.io/gh/rpgrca/tdd-course-2
