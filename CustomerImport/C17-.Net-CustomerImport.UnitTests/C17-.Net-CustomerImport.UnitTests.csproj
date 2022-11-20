@@ -23,7 +23,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="NHibernate" Version="5.3.8" />
+    <PackageReference Include="NHibernate" Version="5.3.14" />
     <PackageReference Include="System.Data.SqlServerCe_unofficial" Version="4.0.8482.1" />
     <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
