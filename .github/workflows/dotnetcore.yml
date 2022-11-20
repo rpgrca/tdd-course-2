@@ -14,10 +14,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Setup .NET 5
+    - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 5.0.100
+        dotnet-version: 7.0.x
 
     - name: Restore packages
       working-directory: CustomerImport
@@ -40,7 +40,7 @@ jobs:
     - name: Checking coverage
       working-directory: CustomerImport
       run: |
-           coverlet C17-.Net-CustomerImport.UnitTests/bin/Debug/net5.0/CustomerImport.UnitTests.dll --target "dotnet" --targetargs "test C17-.Net-CustomerImport.UnitTests/C17-.Net-CustomerImport.UnitTests.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
+           coverlet C17-.Net-CustomerImport.UnitTests/bin/Debug/net7/CustomerImport.UnitTests.dll --target "dotnet" --targetargs "test C17-.Net-CustomerImport.UnitTests/C17-.Net-CustomerImport.UnitTests.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
 
     - name: Upload coverage to CodeCov
       run: bash <(curl -s https://codecov.io/bash)
