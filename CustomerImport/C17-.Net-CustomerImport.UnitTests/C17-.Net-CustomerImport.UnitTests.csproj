@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentNHibernate" Version="3.2.0" />
+    <PackageReference Include="FluentNHibernate" Version="3.2.1" />
     <PackageReference Include="Iesi.Collections" Version="4.0.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.1" />
     <PackageReference Include="coverlet.collector" Version="6.0.0">
