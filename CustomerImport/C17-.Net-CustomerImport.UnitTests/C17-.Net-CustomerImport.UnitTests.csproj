@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7</TargetFramework>
+    <TargetFramework>net9</TargetFramework>
     <RootNamespace>CustomerImport.UnitTests</RootNamespace>
     <AssemblyName>CustomerImport.UnitTests</AssemblyName>
   </PropertyGroup>
@@ -35,7 +35,7 @@
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Coverage' ">
     <Exec Command="dotnet tool restore" />
-    <Exec Command="dotnet coverlet bin/Debug/net5.0/CustomerImport.dll --target &quot;dotnet&quot; --targetargs &quot;test C17-.Net-CustomerImport.csproj --no-build --verbosity quiet&quot; --format cobertura --output reports/coverage/coverage.cobertura.xml" />
+    <Exec Command="dotnet coverlet bin/Debug/net9/CustomerImport.dll --target &quot;dotnet&quot; --targetargs &quot;test C17-.Net-CustomerImport.csproj --no-build --verbosity quiet&quot; --format cobertura --output reports/coverage/coverage.cobertura.xml" />
     <Exec Command="dotnet reportgenerator &quot;-reports:reports/coverage/coverage.cobertura.xml&quot; &quot;-targetdir:reports/html&quot; &quot;-historydir:reports/coverage/history&quot;" />
   </Target>
 
