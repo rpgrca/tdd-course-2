@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="FluentNHibernate" Version="3.4.0" />
     <PackageReference Include="Iesi.Collections" Version="4.1.1" />
-    <PackageReference Include="NHibernate" Version="5.5.2" />
+    <PackageReference Include="NHibernate" Version="5.6.0" />
     <PackageReference Include="System.Security.Permissions" Version="9.0.1" />
   </ItemGroup>
 
