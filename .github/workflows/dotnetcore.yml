@@ -43,7 +43,7 @@ jobs:
            coverlet C17-.Net-CustomerImport.UnitTests/bin/Debug/net9/CustomerImport.UnitTests.dll --target "dotnet" --targetargs "test C17-.Net-CustomerImport.UnitTests/C17-.Net-CustomerImport.UnitTests.csproj --no-build --verbosity quiet" --format OpenCover --output customerimport.coverage.xml
 
     - name: Upload coverage to CodeCov
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
